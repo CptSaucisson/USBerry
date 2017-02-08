@@ -1,0 +1,10 @@
+#######################
+##  Base UDEV rules  ##
+#######################
+
+SUBSYSTEM!="usb", GOTO="usb_end"
+ACTION=="remove", GOTO="usb_end"
+
+
+
+
