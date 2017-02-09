@@ -79,3 +79,9 @@ misc detected
 misc detected
 USB storage detected
 misc detected
+USB storage detected
+USB storage detected
+misc detected
+misc detected
+misc detected
+misc detected

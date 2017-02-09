@@ -19,9 +19,15 @@ import os
 from subprocess import Popen, PIPE
 
 
-rulepath = "/etc/udev/rules.d/75-USBerry.rules"
+rulepath = "/etc/udev/rules.d/01-USBerry.rules"
 mypath = os.path.dirname(os.path.realpath(__file__)) 
 rule = ""
+
+
+# sudo useradd usberry -M -s /dev/null -U
+sink_group = "usberry"
+sink_user = "usberry"
+sink_mode = "0600"
 
 
 def create_rule():
@@ -33,10 +39,9 @@ def create_rule():
                 if(l[0] != '#'):tmp.append(l)
 
 
-        tmp.append('SUBSYSTEMS=="usb", ATTR{bInterfaceClass}=="08", ACTION=="add", ATTR{authorized}="1", RUN+="'+mypath+'/script.sh", GOTO="usb_end"')
+        #tmp.append('SUBSYSTEMS=="usb", ATTR{bInterfaceClass}=="08", ACTION=="add", ATTR{authorized}="1", RUN+="'+mypath+'/script.sh", GOTO="usb_end"')
        
-
-        #tmp.append('SUBSYSTEMS=="usb", ATTR{bInterfaceClass}=="08", ACTION=="add", ATTR{authorized}="1", GROUP="USBerry", OWNER="USBerry", MODE="0600", RUN+="'+mypath+'/script.sh", GOTO="usb_end"')
+        tmp.append('SUBSYSTEMS=="usb", ATTR{bInterfaceClass}=="08", ACTION=="add", ATTR{authorized}="1", GROUP="'+sink_group+'", MODE="'+sink_mode+'", RUN+="'+mypath+'/script.sh", GOTO="usb_end"')
 
         tmp.append('SUBSYSTEMS=="usb", ATTR{bInterfaceClass}=="09", ACTION=="add", ATTR{authorized}="1", GOTO="usb_end"')
        
