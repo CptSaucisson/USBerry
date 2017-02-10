@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "misc detected" >> /home/olbaid/Documents/USBerry/udevtests.txt
+echo "usb detected : $1" >> /var/log/usberry.log
