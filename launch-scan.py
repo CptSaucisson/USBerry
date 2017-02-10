@@ -10,10 +10,13 @@ import time
 import subprocess
 import logging
 
+
+mypath = os.path.dirname(os.path.realpath(__file__)) 
+
 irma_brain = "172.16.1.30"
 api = "http://"+irma_brain+"/api/v1.1/"
 
-test_format_file = "formats.txt"
+test_format_file = mypath+"/formats.txt"
 
 
 listOfTest = list()
@@ -128,7 +131,7 @@ class API:
             logging.debug(r)
 
             logging.info("GO TO : http://"+irma_brain+"/scan/"+r[1]["id"]+"/")
-            
+
 
 
     def getAllProbes(self):
@@ -169,19 +172,32 @@ def getDevName(kernelId):
 def mountFS(path):
     logging.info("Mounting file system")
 
-    #if(not os.path.isdir("/mnt/usberry")):
-    #    res_mkdir = subprocess.check_call(["mkdir","/mnt/usberry"])
-    #else:
-    #    res_mkdir = "EXISTED"
-    #logging.debug("Res-mkdir : "+str(res_mkdir))
-    
-    res_mount = subprocess.check_call(["mount", path, "/mnt/usberry"])
-    if(res_mount != 0):
-        logging.error("ERREUR mounting")
-        sys.exit(1)
+    errors = False
 
-    logging.info("System mounted")
+    try:
+        res_mkdir = subprocess.check_call(["mkdir","/mnt/usberry"])
+    except Exception as e:
+        logging.error(e)
+        errors = True
     
+    try:
+        res_mount = subprocess.check_call(["mount", path, "/mnt/usberry"])
+        if(res_mount != 0):
+            logging.error("ERREUR mounting")
+            sys.exit(1)
+    except Exception as e:
+        logging.error(e)
+        errors = True
+
+
+    if(not errors):
+        logging.info("System mounted")
+    else:
+        logging.error("FAILED MOUNTING !")
+    
+    return errors
+
+
 def startScan(path):
     logging.info("STARTING SCAAAAAAAAAN !!!")
 
@@ -198,16 +214,20 @@ if __name__ == '__main__':
         logging.info("NEED Mounted Kernel")
         sys.exit(0)
     
-    #time.sleep(15)
+    time.sleep(5)
     logging.info("starting with kernel :"+sys.argv[1]+"\n") 
   
     path = getDevName(sys.argv[1])
     logging.info("path = "+path)
+    res = False
     try:
-        mountFS(path)
+        res = mountFS(path)
     except Exception as e:
         logging.error(e)
-        sys.exit(1)
+        res = True
+    if(res):sys.exit(1)
+
+
 
     try:
         startScan("/mnt/usberry")

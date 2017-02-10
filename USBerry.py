@@ -38,8 +38,8 @@ def create_rule():
 		for l in f.readlines():
 			if(l[0] != '#'):tmp.append(l)
 
-	tmp.append('SUBSYSTEMS=="usb", ATTR{bInterfaceClass}=="08", ACTION=="add", ATTR{authorized}="1", RUN+="'+mypath+'/script2.sh %k", GOTO="usb_end"')	   
-	tmp.append('SUBSYSTEM=="block",KERNEL=="sd*", ATTR{events}=="media_change", RUN+="'+mypath+'/script.sh %k", GOTO="usb_end"')	   
+	#tmp.append('SUBSYSTEMS=="usb", ATTR{bInterfaceClass}=="08", ACTION=="add", ATTR{authorized}="1", RUN+="'+mypath+'/script2.sh %k", GOTO="usb_end"')	   
+	tmp.append('SUBSYSTEM=="block",KERNEL=="sd*", ATTR{events}=="media_change", RUN+="'+mypath+'/script.sh %k &", GOTO="usb_end"')	   
 	#tmp.append('SUBSYSTEMS=="usb", ATTR{bInterfaceClass}=="08", ACTION=="add", ATTR{authorized}="1", GROUP="'+sink_group+'", MODE="'+sink_mode+'", RUN+="'+mypath+'/script.sh", GOTO="usb_end"')
 	tmp.append('SUBSYSTEMS=="usb", ATTR{bInterfaceClass}=="09", ACTION=="add", ATTR{authorized}="1", GOTO="usb_end"')
 	#tmp.append('ATTR{usberry}=="1", ACTION=="add", SYMLINK+="usberry", GOTO="usb_end"')
