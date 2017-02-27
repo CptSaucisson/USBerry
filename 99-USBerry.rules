@@ -1,0 +1,14 @@
+################################
+##  UDEV RULES				        ##
+##  CptSaucisson - USBerry	  ##
+##  v0.1					            ##
+################################
+
+SUBSYSTEM!="usb|block", GOTO="usb_end"
+
+ACTION=="remove", GOTO="usb_end"
+
+SUBSYSTEM=="block",KERNEL=="sd*", ATTR{events}=="media_change", RUN+="/home/olbaid/Documents/USBerry/script.sh %k &", GOTO="usb_end"
+SUBSYSTEMS=="usb", ATTR{bInterfaceClass}=="09", ACTION=="add", ATTR{authorized}="1", GOTO="usb_end"
+SUBSYSTEMS=="usb", ATTR{bInterfaceClass}!="08", ACTION=="add", ATTR{authorized}="0", RUN="/home/olbaid/Documents/USBerry/script2.sh"
+LABEL="usb_end"
